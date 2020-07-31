@@ -7,13 +7,17 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+                    implements InputFragment.OnInputWrittenListener{
+
+    private WordViewModel mWordViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mWordViewModel = new ViewModelProvider(this).get(WordViewModel.class);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,5 +58,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onWordInputListener(String param) {
+        Word word=new Word(param);
+        mWordViewModel.insert(word);
     }
 }
